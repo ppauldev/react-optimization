@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
-import './App.css'
-import { lorem } from './constants/text'
+import React, { useEffect, useRef, useState } from "react"
+import "./App.css"
+import { lorem } from "./constants/text"
 
 const loremWithLinebreaks = [...lorem].map((char: string, i: number) => i % 72 === 0 ? `${char}\n` : char).join("")
 
@@ -32,7 +32,7 @@ const Tab = ({ active, label, onClick }: { active: boolean, label: string, onCli
   return (
     <li role="presentation">
       <span
-        className={`my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 hover:text-violet-700 focus:isolate focus:border-transparent cursor-pointer ${active ? 'bg-neutral-100' : ''}`}
+        className={`my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 hover:text-violet-700 focus:isolate focus:border-transparent cursor-pointer ${active ? "bg-neutral-100" : ""}`}
         role="tab"
         onClick={onClick}
       >
@@ -46,7 +46,7 @@ const Info = ({ count, mountTime, renderTime }: { count: number, mountTime: numb
   return (
     <div className="mb-5 flex flex-row justify-evenly">
       <div>
-        {/* Number of total DOM nodes to render the 'lorem' text section */}
+        {/* Number of total DOM nodes to render the "lorem" text section */}
         DOM Nodes: <b>{count}</b>
       </div>
       <div>
@@ -88,30 +88,42 @@ const Slowest = () => {
     <>
       <Info count={info.count} mountTime={info.mountTime} renderTime={info.renderTime} />
       <div id="content-0" className="mt-6 mb-6">
-        {lorem.split("").map((char: string, i: number) => (
-          <span
-            key={`content-0_${i}`}
-            onClick={() => {
-              if (active === i) {
-                timerRef.current.renderStartTime = 0
-                setActive(null)
-              } else {
-                timerRef.current.renderStartTime = Date.now()
-                setActive(i)
-              }
-            }}
-            style={{ backgroundColor: active === i ? 'lightblue' : 'transparent' }}
-          >
-            {char}
-          </span>)
-        )}
+        {lorem.split("").map((char: string, i: number) => {
+          if (active === i) {
+            return (
+              <span
+                key={`content-0_${i}`}
+                onClick={() => {
+                  timerRef.current.renderStartTime = 0
+                  setActive(null)
+                }}
+                style={{ backgroundColor: "lightblue" }}
+              >
+                {char}
+              </span>
+            )
+          } else {
+            return (
+              <span
+                key={`content-0_${i}`}
+                onClick={() => {
+                  timerRef.current.renderStartTime = Date.now()
+                  setActive(i)
+                }}
+                style={{ backgroundColor: "transparent" }}
+              >
+                {char}
+              </span>
+            )
+          }
+        })}
       </div>
     </>
   )
 }
 
 const InBetween = () => {
-  const [info, setInfo] = useState({ count: 0, mountTime: Date.now(), renderTime: 70 })
+  const [info, setInfo] = useState({ count: 0, mountTime: Date.now(), renderTime: 0 })
 
   const activeRef = useRef<HTMLSpanElement | null>(null)
 
@@ -119,20 +131,20 @@ const InBetween = () => {
     setInfo({
       count: document.getElementById("content-1")?.childElementCount ?? 0,
       mountTime: Date.now() - info.mountTime,
-      renderTime: 70
+      renderTime: 0
     })
   }, [])
 
   // Note: Processing the click and applying the styling takes between 50-70 ms according to "Performance Insights" in Dev Tools
   const handleClick = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     if (activeRef.current) {
-      (activeRef.current as HTMLSpanElement).style.backgroundColor = 'transparent'
+      (activeRef.current as HTMLSpanElement).style.backgroundColor = "transparent"
     }
 
     if (activeRef.current !== event.target) {
-      (event.target as HTMLSpanElement).style.backgroundColor = 'lightblue'
+      (event.target as HTMLSpanElement).style.backgroundColor = "lightblue"
     } else {
-      (event.target as HTMLSpanElement).style.backgroundColor = 'transparent'
+      (event.target as HTMLSpanElement).style.backgroundColor = "transparent"
     }
 
     activeRef.current = event.target as HTMLSpanElement
@@ -157,7 +169,7 @@ const InBetween = () => {
 
 const Fastest = () => {
   const [activeLine, setActiveLine] = useState<number | null>(null)
-  const [info, setInfo] = useState({ count: 0, mountTime: Date.now(), renderTime: 70 })
+  const [info, setInfo] = useState({ count: 0, mountTime: Date.now(), renderTime: 0 })
 
   const activeRef = useRef<HTMLSpanElement | null>(null)
 
@@ -165,20 +177,20 @@ const Fastest = () => {
     setInfo({
       count: document.getElementById("content-2")?.childElementCount ?? 0,
       mountTime: Date.now() - info.mountTime,
-      renderTime: 70
+      renderTime: 0
     })
   }, [])
 
   // Note: Processing the click and applying the styling takes between 50-70 ms according to "Performance Insights" in Dev Tools
   const handleClick = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     if (activeRef.current) {
-      (activeRef.current as HTMLSpanElement).style.backgroundColor = 'transparent'
+      (activeRef.current as HTMLSpanElement).style.backgroundColor = "transparent"
     }
 
     if (activeRef.current !== event.target) {
-      (event.target as HTMLSpanElement).style.backgroundColor = 'lightblue'
+      (event.target as HTMLSpanElement).style.backgroundColor = "lightblue"
     } else {
-      (event.target as HTMLSpanElement).style.backgroundColor = 'transparent'
+      (event.target as HTMLSpanElement).style.backgroundColor = "transparent"
     }
 
     activeRef.current = event.target as HTMLSpanElement
@@ -188,7 +200,7 @@ const Fastest = () => {
     <>
       <Info count={info.count} mountTime={info.mountTime} renderTime={info.renderTime} />
       <div id="content-2" className="mt-6 mb-6">
-        {/* Note: Lines are delimited by newline character in parsed 'lorem' data (see top) */}
+        {/* Note: Lines are delimited by newline character in parsed "lorem" data (see top) */}
         {loremWithLinebreaks.split("\n").map((line: string, lineIndex: number) => {
           const lineElement = document.getElementById(`content-2_line${lineIndex}_active`)
 
