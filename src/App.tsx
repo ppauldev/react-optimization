@@ -77,7 +77,7 @@ const Slowest = () => {
             <span
               key={`content-0_${i}`}
               onClick={() => active === i ? setActive(null) : setActive(i)}
-              style={{ backgroundColor: active === i ? "lightblue" : "transparent" }}
+              style={{ backgroundColor: active === i ? "rgb(221 214 254)" : "transparent" }}
             >
               {char}
             </span>
@@ -107,7 +107,7 @@ const InBetween = () => {
     }
 
     if (activeRef.current !== event.target) {
-      (event.target as HTMLSpanElement).style.backgroundColor = "lightblue"
+      (event.target as HTMLSpanElement).style.backgroundColor = "rgb(221 214 254)"
     } else {
       (event.target as HTMLSpanElement).style.backgroundColor = "transparent"
     }
@@ -152,7 +152,7 @@ const Fastest = () => {
     }
 
     if (activeRef.current !== event.target) {
-      (event.target as HTMLSpanElement).style.backgroundColor = "lightblue"
+      (event.target as HTMLSpanElement).style.backgroundColor = "rgb(221 214 254)"
     } else {
       (event.target as HTMLSpanElement).style.backgroundColor = "transparent"
     }
