@@ -76,9 +76,7 @@ const Slowest = () => {
           return (
             <span
               key={`content-0_${i}`}
-              onClick={() => {
-                setActive(null)
-              }}
+              onClick={() => active === i ? setActive(null) : setActive(i)}
               style={{ backgroundColor: active === i ? "lightblue" : "transparent" }}
             >
               {char}
