@@ -42,7 +42,7 @@ const Tab = ({ active, label, onClick }: { active: boolean, label: string, onCli
   )
 }
 
-const Info = ({ count, mountTime, renderTime }: { count: number, mountTime: number, renderTime: number }) => {
+const Info = ({ count, mountTime }: { count: number, mountTime: number }) => {
   return (
     <div className="mb-5 flex flex-row justify-evenly">
       <div>
@@ -53,69 +53,37 @@ const Info = ({ count, mountTime, renderTime }: { count: number, mountTime: numb
         {/* Time in milliseconds to mount the component */}
         Mount Time: <b>{mountTime}</b> ms
       </div>
-      <div>
-        {/* Time in milliseconds to render the text character highlight */}
-        Highlight Time: <b>{renderTime}</b> ms
-      </div>
     </div>
   )
 }
 
 const Slowest = () => {
-  const timerRef = useRef({ renderStartTime: 0 })
-
   const [active, setActive] = useState<number | null>(null)
-  const [info, setInfo] = useState({ count: 0, mountTime: Date.now(), renderTime: 0 })
+  const [info, setInfo] = useState({ count: 0, mountTime: Date.now() })
 
   useEffect(() => {
     setInfo({
       count: document.getElementById("content-0")?.childElementCount ?? 0,
       mountTime: Date.now() - info.mountTime,
-      renderTime: 0
     })
   }, [])
 
-  useEffect(() => {
-    if (active === null) return;
-
-    setInfo({
-      ...info,
-      renderTime: Date.now() - timerRef.current.renderStartTime
-    })
-  }, [active])
-
   return (
     <>
-      <Info count={info.count} mountTime={info.mountTime} renderTime={info.renderTime} />
+      <Info count={info.count} mountTime={info.mountTime} />
       <div id="content-0" className="mt-6 mb-6">
         {lorem.split("").map((char: string, i: number) => {
-          if (active === i) {
-            return (
-              <span
-                key={`content-0_${i}`}
-                onClick={() => {
-                  timerRef.current.renderStartTime = 0
-                  setActive(null)
-                }}
-                style={{ backgroundColor: "lightblue" }}
-              >
-                {char}
-              </span>
-            )
-          } else {
-            return (
-              <span
-                key={`content-0_${i}`}
-                onClick={() => {
-                  timerRef.current.renderStartTime = Date.now()
-                  setActive(i)
-                }}
-                style={{ backgroundColor: "transparent" }}
-              >
-                {char}
-              </span>
-            )
-          }
+          return (
+            <span
+              key={`content-0_${i}`}
+              onClick={() => {
+                setActive(null)
+              }}
+              style={{ backgroundColor: active === i ? "lightblue" : "transparent" }}
+            >
+              {char}
+            </span>
+          )
         })}
       </div>
     </>
@@ -123,7 +91,7 @@ const Slowest = () => {
 }
 
 const InBetween = () => {
-  const [info, setInfo] = useState({ count: 0, mountTime: Date.now(), renderTime: 0 })
+  const [info, setInfo] = useState({ count: 0, mountTime: Date.now() })
 
   const activeRef = useRef<HTMLSpanElement | null>(null)
 
@@ -131,7 +99,6 @@ const InBetween = () => {
     setInfo({
       count: document.getElementById("content-1")?.childElementCount ?? 0,
       mountTime: Date.now() - info.mountTime,
-      renderTime: 0
     })
   }, [])
 
@@ -152,7 +119,7 @@ const InBetween = () => {
 
   return (
     <>
-      <Info count={info.count} mountTime={info.mountTime} renderTime={info.renderTime} />
+      <Info count={info.count} mountTime={info.mountTime} />
       <div id="content-1" className="mt-6 mb-6">
         {lorem.split("").map((char: string, i: number) => (
           <span
@@ -169,7 +136,7 @@ const InBetween = () => {
 
 const Fastest = () => {
   const [activeLine, setActiveLine] = useState<number | null>(null)
-  const [info, setInfo] = useState({ count: 0, mountTime: Date.now(), renderTime: 0 })
+  const [info, setInfo] = useState({ count: 0, mountTime: Date.now() })
 
   const activeRef = useRef<HTMLSpanElement | null>(null)
 
@@ -177,7 +144,6 @@ const Fastest = () => {
     setInfo({
       count: document.getElementById("content-2")?.childElementCount ?? 0,
       mountTime: Date.now() - info.mountTime,
-      renderTime: 0
     })
   }, [])
 
@@ -198,7 +164,7 @@ const Fastest = () => {
 
   return (
     <>
-      <Info count={info.count} mountTime={info.mountTime} renderTime={info.renderTime} />
+      <Info count={info.count} mountTime={info.mountTime} />
       <div id="content-2" className="mt-6 mb-6">
         {/* Note: Lines are delimited by newline character in parsed "lorem" data (see top) */}
         {loremWithLinebreaks.split("\n").map((line: string, lineIndex: number) => {
